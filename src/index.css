@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#canvas {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+body {
+    background: #100000;
+    height: 100dvh;
+    width: 100dvw;
+    margin: 0;
+    font-family: "JetBrains Mono", sans-serif;
+}
+
+.content {
+    mix-blend-mode: difference;
+}
+
+.socials > a {
+    @apply w-16 transition
+}
+
+.socials > a:hover {
+    @apply scale-125
+}
