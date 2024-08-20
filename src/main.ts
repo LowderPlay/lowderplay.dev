@@ -1,11 +1,17 @@
 import {canvas, scaleByPixelRatio} from './fluid/canvas.ts';
 import {initFrameBuffers} from './fluid/shaders/shaders.ts';
 import {correctDeltaX, correctDeltaY, pointer, splat, update} from './fluid/render.ts';
+import {isMobile} from './fluid/config.ts';
 
 initFrameBuffers();
 multipleSplats(Math.floor(Math.random() * 20) + 5);
 
 update();
+
+const shake = document.getElementById("shake")!;
+if(isMobile()) {
+  shake.style.opacity = '1';
+}
 
 function multipleSplats(amount: number) {
   for (let i = 0; i < amount; i++) {
@@ -36,6 +42,7 @@ window.addEventListener("devicemotion", (event) => {
   const isX = Math.abs(event.acceleration.x) > 5;
   const isY = Math.abs(event.acceleration.y) > 5;
   if(isX || isY) {
+    shake.style.opacity = '0';
     const x = 0.5 + event.acceleration.x / 30;
     const y = 0.5 + event.acceleration.y / 30;
     splat(x, y, event.acceleration.x * 300, event.acceleration.y * 300);

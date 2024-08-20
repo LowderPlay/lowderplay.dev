@@ -34,7 +34,7 @@ if (!ext.supportLinearFiltering) {
   config.SUN_RAYS = false;
 }
 
-function isMobile () {
+export function isMobile () {
   return /Mobi|Android/i.test(navigator.userAgent);
 }
 
