@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+}
+
+body {
+    background-color: #000000;
+    color: #e4e4e7;
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
 #canvas {
     position: fixed;
     z-index: -1;
@@ -9,26 +23,40 @@
     left: 0;
     width: 100vw;
     height: 100vh;
+    pointer-events: none;
+    opacity: 0.35;
 }
 
-body {
-    background: #100000;
-    height: 100dvh;
-    width: 100dvw;
-    margin: 0;
-    font-family: "JetBrains Mono", sans-serif;
+.glass-nav {
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.content {
-    mix-blend-mode: difference;
+/* Open list row hover effect */
+.list-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.2s ease;
 }
 
-.socials > a {
-    @apply w-16 transition
+.list-row:hover {
+    border-bottom-color: rgba(239, 68, 68, 0.6);
+    background: rgba(255, 255, 255, 0.02);
 }
 
-.socials > a:hover {
-    @apply scale-125
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+::-webkit-scrollbar-thumb {
+    background: #262626;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ef4444;
 }
 
 #shake {

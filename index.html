@@ -1,48 +1,421 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lowderplay</title>
+    <title>LowderPlay — Web & Systems Developer</title>
+    <meta name="description" content="LowderPlay — Web & Systems Developer from Russia, Yekaterinburg. Developer of cheburcheck, MonaDNS, TeleOTP contributor, and developer at arizona-bebras." />
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" href="/src/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   </head>
-  <body class="text-[#ff0000] p-5 md:p-0 md:justify-center items-center flex">
+  <body class="bg-black text-zinc-200 antialiased selection:bg-red-600 selection:text-white min-h-screen flex flex-col font-sans">
+    <!-- WebGL Fluid Smoke Canvas -->
     <canvas id="canvas"></canvas>
-    <img src="/phone.svg" alt="Shake" class="fixed top-0 right-0 w-20 m-5 transition-opacity duration-500" id="shake" style="opacity: 0;">
-    <div class="content">
-      <h1 class="text-5xl sm:text-6xl md:text-8xl font-bold">@lowderplay</h1>
-      <p class="mt-5 text-xl font-medium">Web & Embedded dev from Russia, Yekaterinburg</p>
-      <div class="socials mt-8 flex-row gap-8 flex-wrap flex">
-        <a target="_blank" href="https://github.com/LowderPlay">
-          <img src="https://cdn.simpleicons.org/github/ff0000" alt="Github"/>
-        </a>
-        <a target="_blank" href="https://t.me/lowderplay">
-          <img src="https://cdn.simpleicons.org/telegram/ff0000" alt="Telegram"/>
-        </a>
-        <a href="#" onclick="navigator.clipboard.writeText('lowderplay'); alert('Copied!')">
-          <img src="https://cdn.simpleicons.org/discord/ff0000" alt="Discord"/>
-        </a>
-        <a target="_blank" href="https://www.instagram.com/lowderplay/">
-          <img src="https://cdn.simpleicons.org/instagram/ff0000" alt="Instagram"/>
-        </a>
-        <a target="_blank" href="https://x.com/LowderPlay">
-          <img src="https://cdn.simpleicons.org/x/ff0000" alt="X"/>
-        </a>
-        <a target="_blank" href="https://steamcommunity.com/id/lowderplay">
-          <img src="https://cdn.simpleicons.org/steam/ff0000" alt="Steam"/>
-        </a>
-        <a target="_blank" href="https://www.youtube.com/@lowderplay">
-          <img src="https://cdn.simpleicons.org/youtube/ff0000" alt="YouTube"/>
-        </a>
-        <a target="_blank" href="https://twitch.tv/lowder_play">
-          <img src="https://cdn.simpleicons.org/twitch/ff0000" alt="Twitch"/>
-        </a>
-      </div>
+
+    <!-- Shake icon for mobile acceleration -->
+    <img src="/phone.svg" alt="Shake Device" class="fixed top-20 right-5 z-40 w-10 h-10 p-2 bg-black border border-red-900/60 transition-opacity duration-500" id="shake" style="opacity: 0;" title="Shake phone to trigger smoke!">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-black border border-red-600 text-zinc-100 px-4 py-3 shadow-2xl flex items-center gap-3">
+      <span id="toast-message" class="text-xs font-mono">Copied to clipboard!</span>
     </div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 glass-nav">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-3 group">
+          <span class="font-mono font-bold text-red-500 text-lg group-hover:text-red-400 transition-colors">
+            @lowderplay
+          </span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+          <a href="#projects" class="hover:text-red-500 transition-colors">Projects</a>
+          <a href="#skills" class="hover:text-red-500 transition-colors">Tech Stack</a>
+          <a href="#contact" class="hover:text-red-500 transition-colors">Contact</a>
+        </nav>
+
+        <!-- Header Actions -->
+        <div class="flex items-center gap-4">
+          <a href="https://github.com/LowderPlay" target="_blank" rel="noopener noreferrer" class="p-1.5 text-zinc-400 hover:text-red-500 transition-colors" title="GitHub Profile">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Container (Wide Desktop Layout) -->
+    <main class="flex-grow pt-28 pb-24 px-4 sm:px-6 max-w-6xl mx-auto w-full space-y-24">
+      
+      <!-- HERO SECTION -->
+      <section id="about" class="pt-4 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start border-b border-zinc-900 pb-16">
+        <div class="lg:col-span-8 space-y-6">
+          <!-- Status Line -->
+          <div class="text-xs font-mono text-zinc-400">
+            <span>Web & Embedded Developer</span>
+          </div>
+
+          <!-- Main Headline -->
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+            Ivan Evstratov
+          </h1>
+
+          <!-- Bio Paragraph -->
+          <p class="text-lg sm:text-xl text-zinc-300 leading-relaxed font-normal">
+            Building high-performance web applications, network tools, and embedded systems.
+          </p>
+        </div>
+
+        <!-- Right Column Stats -->
+        <div class="lg:col-span-4 lg:pl-6 grid grid-cols-2 lg:grid-cols-1 gap-8">
+          <div>
+            <div class="text-3xl font-extrabold text-white font-mono">670+</div>
+            <div class="text-xs text-zinc-400 mt-1">GitHub Stars</div>
+          </div>
+          <div>
+            <div class="text-3xl font-extrabold text-white font-mono">Rust & TS</div>
+            <div class="text-xs text-zinc-400 mt-1">Favorite Stack</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURED PROJECTS SECTION (Wide 2-Column Grid) -->
+      <section id="projects" class="space-y-8">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-900 pb-4">
+          <div>
+            <div class="text-xs font-mono font-semibold uppercase tracking-wider text-red-500 mb-1">
+              Portfolio
+            </div>
+            <h2 class="text-3xl font-bold text-white tracking-tight">Featured Projects</h2>
+          </div>
+
+          <!-- Project Filter Tabs -->
+          <div class="flex flex-wrap gap-4 text-sm font-medium">
+            <button class="project-filter-btn text-red-500 font-bold underline transition-colors cursor-pointer" data-filter="all">All</button>
+            <button class="project-filter-btn text-zinc-400 hover:text-white transition-colors cursor-pointer" data-filter="systems">Systems & Networking</button>
+            <button class="project-filter-btn text-zinc-400 hover:text-white transition-colors cursor-pointer" data-filter="web">Web & Mobile</button>
+            <button class="project-filter-btn text-zinc-400 hover:text-white transition-colors cursor-pointer" data-filter="hardware">Hardware & IoT</button>
+          </div>
+        </div>
+
+        <!-- Projects Grid (Wide 2 Columns) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+
+          <!-- 1. cheburcheck -->
+          <div class="project-card list-row pb-8 space-y-3" data-category="web">
+            <div class="flex items-baseline justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <a href="https://github.com/LowderPlay/cheburcheck" target="_blank" class="text-xl font-bold text-white hover:text-red-500 transition-colors">
+                  cheburcheck
+                </a>
+                <span class="text-xs font-mono text-red-500 font-medium">Rust</span>
+              </div>
+              <div class="text-xs font-mono text-red-500 font-semibold">
+                ★ 530+
+              </div>
+            </div>
+            <p class="text-sm text-zinc-300 leading-relaxed">
+              High-performance web service for measuring internet censorship & access restrictions in Russia.
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 text-xs text-zinc-400">
+              <span>Rust • Rocket.rs • SvelteKit • SQLx</span>
+              <div class="flex items-center gap-4">
+                <a href="https://cheburcheck.ru" target="_blank" class="text-red-500 hover:underline font-medium">
+                  Open Website ↗
+                </a>
+                <a href="https://github.com/LowderPlay/cheburcheck" target="_blank" class="text-red-500 hover:underline font-medium">
+                  Repository →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. TeleOTP -->
+          <div class="project-card list-row pb-8 space-y-3" data-category="web">
+            <div class="flex items-baseline justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <a href="https://github.com/UselessStudio/TeleOTP" target="_blank" class="text-xl font-bold text-white hover:text-red-500 transition-colors">
+                  TeleOTP
+                </a>
+                <span class="text-xs font-mono text-red-500 font-medium">TypeScript</span>
+              </div>
+              <div class="text-xs font-mono text-red-500 font-semibold">
+                ★ 125+
+              </div>
+            </div>
+            <p class="text-sm text-zinc-300 leading-relaxed">
+              Telegram Mini App for generating Time-based 2FA One-Time Passwords (TOTP) inside Telegram with cloud E2E AES encryption and Google Authenticator sync.
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 text-xs text-zinc-400">
+              <span>TypeScript • Telegram API • Crypto</span>
+              <div class="flex items-center gap-4">
+                <a href="https://t.me/TeleOTPAppBot" target="_blank" class="text-red-500 hover:underline font-medium">
+                  Open Bot ↗
+                </a>
+                <a href="https://github.com/UselessStudio/TeleOTP" target="_blank" class="text-red-500 hover:text-white font-medium">
+                  Repository →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. MonaDNS -->
+          <div class="project-card list-row pb-8 space-y-3" data-category="systems">
+            <div class="flex items-baseline justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <a href="https://github.com/LowderPlay/monadns" target="_blank" class="text-xl font-bold text-white hover:text-red-500 transition-colors">
+                  MonaDNS
+                </a>
+                <span class="text-xs font-mono text-red-500 font-medium">Rust</span>
+              </div>
+            </div>
+            <p class="text-sm text-zinc-300 leading-relaxed">
+              Transparent DNS-based traffic steering resolver. Intercepts DNS queries for fake IPs and automatically manages Linux kernel networking (nftables and iproute2) for multi-interface routing & failover.
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 text-xs text-zinc-400">
+              <span>Rust • Linux Kernel • nftables</span>
+              <a href="https://github.com/LowderPlay/monadns" target="_blank" class="text-red-500 hover:underline font-medium">
+                Repository →
+              </a>
+            </div>
+          </div>
+
+          <!-- 4. Qnlink / Virtual Networks -->
+          <div class="project-card list-row pb-8 space-y-3" data-category="systems">
+            <div class="flex items-baseline justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <a href="https://github.com/arizona-bebras/virtual-networks" target="_blank" class="text-xl font-bold text-white hover:text-red-500 transition-colors">
+                  Qnlink
+                </a>
+                <span class="text-xs font-mono text-red-500 font-medium">Networking</span>
+              </div>
+            </div>
+            <p class="text-sm text-zinc-300 leading-relaxed">
+              Modern Zero Trust Network Access (ZTNA) platform for invisible infrastructure. Features a graph-based visual network topology editor built on WireGuard principles.
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 text-xs text-zinc-400">
+              <span>Svelte • TypeScript • WireGuard • Go</span>
+              <a href="https://github.com/arizona-bebras/virtual-networks" target="_blank" class="text-red-500 hover:underline font-medium">
+                Repository →
+              </a>
+            </div>
+          </div>
+
+          <!-- 5. Shumi / Hobby Match -->
+          <div class="project-card list-row pb-8 space-y-3" data-category="web">
+            <div class="flex items-baseline justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <a href="https://github.com/arizona-bebras/hobby-match" target="_blank" class="text-xl font-bold text-white hover:text-red-500 transition-colors">
+                  Shumi.space
+                </a>
+                <span class="text-xs font-mono text-red-500 font-medium">AI & Vector Search</span>
+              </div>
+            </div>
+            <p class="text-sm text-zinc-300 leading-relaxed">
+              Semantic interest-matching web application using pgVector embeddings & Jina AI models, Go backend API, and Telegram bot integration.
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 text-xs text-zinc-400">
+              <span>SvelteKit • Go • PostgreSQL • pgVector • Telegram Bot</span>
+              <a href="https://github.com/arizona-bebras/hobby-match" target="_blank" class="text-red-500 hover:text-white font-medium">
+                Repository →
+              </a>
+            </div>
+          </div>
+
+          <!-- 6. vk-bridge -->
+          <div class="project-card list-row pb-8 space-y-3" data-category="systems">
+            <div class="flex items-baseline justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <a href="https://github.com/LowderPlay/vk-bridge" target="_blank" class="text-xl font-bold text-white hover:text-red-500 transition-colors">
+                  vk-bridge
+                </a>
+                <span class="text-xs font-mono text-red-500 font-medium">Rust</span>
+              </div>
+            </div>
+            <p class="text-sm text-zinc-300 leading-relaxed">
+              Automated chat migration application to mirror VK messages, photos, videos, voice notes, and polls directly into Telegram channels.
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 text-xs text-zinc-400">
+              <span>Rust • VK API • Telegram Bot API</span>
+              <a href="https://github.com/LowderPlay/vk-bridge" target="_blank" class="text-red-500 hover:underline font-medium">
+                Repository →
+              </a>
+            </div>
+          </div>
+
+          <!-- 7. bincvmap -->
+          <div class="project-card list-row pb-8 space-y-3" data-category="hardware">
+            <div class="flex items-baseline justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <a href="https://github.com/LowderPlay/bincvmap" target="_blank" class="text-xl font-bold text-white hover:text-red-500 transition-colors">
+                  bincvmap
+                </a>
+                <span class="text-xs font-mono text-red-500 font-medium">Python</span>
+              </div>
+            </div>
+            <p class="text-sm text-zinc-300 leading-relaxed">
+              Spatial 3D mapping of addressable LED strips using computer vision camera feeds with OpenCV.
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 text-xs text-zinc-400">
+              <span>Python • OpenCV • Hardware</span>
+              <a href="https://github.com/LowderPlay/bincvmap" target="_blank" class="text-red-500 hover:underline font-medium">
+                Repository →
+              </a>
+            </div>
+          </div>
+
+          <!-- 8. upload-s3-artifact -->
+          <div class="project-card list-row pb-8 space-y-3" data-category="systems">
+            <div class="flex items-baseline justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <a href="https://github.com/LowderPlay/upload-s3-artifact" target="_blank" class="text-xl font-bold text-white hover:text-red-500 transition-colors">
+                  upload-s3-artifact
+                </a>
+                <span class="text-xs font-mono text-red-500 font-medium">DevOps</span>
+              </div>
+            </div>
+            <p class="text-sm text-zinc-300 leading-relaxed">
+              GitHub Action tool to upload build outputs & CI artifacts to S3-compatible storage backends.
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 text-xs text-zinc-400">
+              <span>TypeScript • GitHub Actions • AWS S3</span>
+              <a href="https://github.com/LowderPlay/upload-s3-artifact" target="_blank" class="text-red-500 hover:underline font-medium">
+                Repository →
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TECH STACK SECTION -->
+      <section id="skills" class="space-y-8">
+        <div class="border-b border-zinc-900 pb-4">
+          <div class="text-xs font-mono font-semibold uppercase tracking-wider text-red-500 mb-1">
+            Toolbox
+          </div>
+          <h2 class="text-3xl font-bold text-white tracking-tight">Tech Stack</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          
+          <div class="space-y-3">
+            <div class="text-sm font-bold text-white uppercase tracking-wider">Languages</div>
+            <ul class="space-y-2 text-sm text-zinc-400">
+              <li class="text-zinc-200">Rust</li>
+              <li class="text-zinc-200">TypeScript</li>
+              <li class="text-zinc-200">Python</li>
+              <li class="text-zinc-200">Dart</li>
+            </ul>
+          </div>
+
+          <div class="space-y-3">
+            <div class="text-sm font-bold text-white uppercase tracking-wider">Systems & DevOps</div>
+            <ul class="space-y-2 text-sm text-zinc-400">
+              <li class="text-zinc-200">Linux</li>
+              <li class="text-zinc-200">Docker</li>
+              <li class="text-zinc-200">Git</li>
+              <li class="text-zinc-200">Proxmox</li>
+            </ul>
+          </div>
+
+          <div class="space-y-3">
+            <div class="text-sm font-bold text-white uppercase tracking-wider">Web & Applications</div>
+            <ul class="space-y-2 text-sm text-zinc-400">
+              <li class="text-zinc-200">Svelte</li>
+              <li class="text-zinc-200">React</li>
+              <li class="text-zinc-200">Nest.js</li>
+              <li class="text-zinc-200">Rocket.rs</li>
+              <li class="text-zinc-200">Tauri</li>
+            </ul>
+          </div>
+
+          <div class="space-y-3">
+            <div class="text-sm font-bold text-white uppercase tracking-wider">Databases</div>
+            <ul class="space-y-2 text-sm text-zinc-400">
+              <li class="text-zinc-200">PostgreSQL</li>
+              <li class="text-zinc-200">Drizzle ORM</li>
+              <li class="text-zinc-200">Prisma ORM</li>
+              <li class="text-zinc-200">Diesel ORM</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- LINKS & CONTACT SECTION -->
+      <section id="contact" class="space-y-8">
+        <div class="border-b border-zinc-900 pb-4">
+          <div class="text-xs font-mono font-semibold uppercase tracking-wider text-red-500 mb-1">
+            Connect
+          </div>
+          <h2 class="text-3xl font-bold text-white tracking-tight">Socials & Contact</h2>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-y-6 gap-x-8">
+
+          <a target="_blank" href="https://github.com/LowderPlay" class="flex items-center gap-3 text-sm text-zinc-300 hover:text-red-500 transition-colors group">
+            <img src="https://cdn.simpleicons.org/github/ef4444" alt="GitHub" class="w-5 h-5"/>
+            <span class="font-medium">GitHub</span>
+          </a>
+
+          <a target="_blank" href="https://t.me/lowderplay" class="flex items-center gap-3 text-sm text-zinc-300 hover:text-red-500 transition-colors group">
+            <img src="https://cdn.simpleicons.org/telegram/ef4444" alt="Telegram" class="w-5 h-5"/>
+            <span class="font-medium">Telegram</span>
+          </a>
+
+          <button onclick="navigator.clipboard.writeText('lowderplay'); window.showToast('Discord username copied!')" class="flex items-center gap-3 text-sm text-zinc-300 hover:text-red-500 transition-colors cursor-pointer text-left">
+            <img src="https://cdn.simpleicons.org/discord/ef4444" alt="Discord" class="w-5 h-5"/>
+            <span class="font-medium">Discord</span>
+          </button>
+
+          <a target="_blank" href="https://www.instagram.com/lowderplay/" class="flex items-center gap-3 text-sm text-zinc-300 hover:text-red-500 transition-colors group">
+            <img src="https://cdn.simpleicons.org/instagram/ef4444" alt="Instagram" class="w-5 h-5"/>
+            <span class="font-medium">Instagram</span>
+          </a>
+
+          <a target="_blank" href="https://x.com/LowderPlay" class="flex items-center gap-3 text-sm text-zinc-300 hover:text-red-500 transition-colors group">
+            <img src="https://cdn.simpleicons.org/x/ef4444" alt="X" class="w-5 h-5"/>
+            <span class="font-medium">X (Twitter)</span>
+          </a>
+
+          <a target="_blank" href="https://steamcommunity.com/id/lowderplay" class="flex items-center gap-3 text-sm text-zinc-300 hover:text-red-500 transition-colors group">
+            <img src="https://cdn.simpleicons.org/steam/ef4444" alt="Steam" class="w-5 h-5"/>
+            <span class="font-medium">Steam</span>
+          </a>
+
+          <a target="_blank" href="https://www.youtube.com/@lowderplay" class="flex items-center gap-3 text-sm text-zinc-300 hover:text-red-500 transition-colors group">
+            <img src="https://cdn.simpleicons.org/youtube/ef4444" alt="YouTube" class="w-5 h-5"/>
+            <span class="font-medium">YouTube</span>
+          </a>
+
+          <a target="_blank" href="https://twitch.tv/lowder_play" class="flex items-center gap-3 text-sm text-zinc-300 hover:text-red-500 transition-colors group">
+            <img src="https://cdn.simpleicons.org/twitch/ef4444" alt="Twitch" class="w-5 h-5"/>
+            <span class="font-medium">Twitch</span>
+          </a>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-900 bg-black py-8 px-4 sm:px-6">
+      <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-zinc-500">
+        <div class="flex items-center gap-2">
+          <span>© <script>document.write(new Date().getFullYear())</script> LowderPlay</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <span>Yekaterinburg, Russia</span>
+          <a href="#" class="hover:text-red-500 transition-colors">Back to top ↑</a>
+        </div>
+      </div>
+    </footer>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
